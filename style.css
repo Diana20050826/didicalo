@@ -296,3 +296,51 @@ textarea { resize: vertical; }
   .panel, .stat-card, .welcome-banner { animation: appear .45s ease both; }
   @keyframes appear { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
 }
+
+
+/* Melhorias suaves para telemóvel — preserva as cores originais */
+html { scroll-behavior: smooth; }
+button, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+button { touch-action: manipulation; }
+
+@media (max-width: 650px) {
+  .workspace {
+    padding-bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .main-nav {
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .main-nav::-webkit-scrollbar { display: none; }
+
+  input, textarea, select {
+    font-size: 16px;
+  }
+
+  .nav-item {
+    min-height: 42px;
+  }
+
+  .primary-button,
+  .secondary-button {
+    min-height: 44px;
+  }
+
+  .toast {
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.stat-card,
+.panel,
+.item-card,
+.nav-item,
+.secondary-button {
+  transition: border-color .18s ease, background-color .18s ease, transform .18s ease;
+}
+
+.stat-card:hover {
+  border-color: #45404a;
+}
