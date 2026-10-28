@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101114">
+  <meta name="description" content="O espaço privado da Diana e do Gonçalo.">
+  <title>DIDICALO — Private Space</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <main id="authScreen" class="auth-layout">
+    <section class="brand-panel">
+      <div class="brand-mark">D<span>♡</span>G</div>
+      <p class="eyebrow">YOUR PRIVATE SPACE</p>
+      <h1>A vida fica<br>melhor <span>partilhada.</span></h1>
+      <p class="brand-description">
+        Um espaço só vosso para organizar planos, guardar ideias
+        e construir memórias.
+      </p>
+      <div class="brand-footer">PRIVATE SPACE · EST. 2026</div>
+    </section>
+
+    <section class="auth-panel">
+      <div class="mobile-logo">D<span>♡</span>G <small>DIDICALO</small></div>
+
+      <div class="auth-heading">
+        <span class="status-dot"></span>
+        <span>ESPAÇO PRIVADO</span>
+      </div>
+
+      <h2 id="authTitle">Bem-vinda de volta.</h2>
+      <p id="authSubtitle" class="muted">
+        Entra na tua conta para continuares.
+      </p>
+
+      <form id="authForm">
+        <label for="nameInput" id="nameLabel" class="hidden">Nome</label>
+        <input id="nameInput" class="hidden" type="text"
+          placeholder="O teu nome" autocomplete="name">
+
+        <label for="emailInput">Email</label>
+        <input id="emailInput" type="email" placeholder="O teu email"
+          autocomplete="email" required>
+
+        <label for="passwordInput">Palavra-passe</label>
+        <input id="passwordInput" type="password"
+          placeholder="Mínimo de 6 caracteres"
+          autocomplete="current-password" minlength="6" required>
+
+        <button id="authSubmit" class="primary-button" type="submit">
+          Entrar na DIDICALO <span>↗</span>
+        </button>
+      </form>
+
+      <p id="authMessage" class="message" role="status" aria-live="polite"></p>
+
+      <p class="switch-auth">
+        <span id="switchText">Ainda não tens conta?</span>
+        <button id="switchAuth" class="text-button" type="button">
+          Criar conta
+        </button>
+      </p>
+
+      <p class="security-note">
+        <span>◈</span> Acesso reservado a utilizadores autorizados.
+      </p>
+    </section>
+  </main>
+
+  <main id="appScreen" class="app-layout hidden">
+    <aside class="sidebar">
+      <a class="sidebar-brand" href="#" aria-label="DIDICALO">
+        <span class="brand-mark small-mark">D<span>♡</span>G</span>
+        <span>DIDICALO<small>PRIVATE SPACE</small></span>
+      </a>
+
+      <div class="couple-chip">
+        <div class="avatar-pair"><span>D</span><span>G</span></div>
+        <div><strong>Diana & Gonçalo</strong><small>O vosso espaço</small></div>
+      </div>
+
+      <p class="nav-caption">ESPAÇO PARTILHADO</p>
+      <nav id="mainNav" class="main-nav" aria-label="Navegação principal">
+        <button class="nav-item active" data-view="overview">▦ <span>Início</span></button>
+        <button class="nav-item" data-view="agenda">▦ <span>Agenda</span></button>
+        <button class="nav-item" data-view="tasks">☑ <span>Tarefas e listas</span></button>
+        <button class="nav-item" data-view="plans">✳ <span>Planos e ideias</span></button>
+        <button class="nav-item" data-view="expenses">€ <span>Despesas</span></button>
+        <button class="nav-item" data-view="notes">▤ <span>Notas e recados</span></button>
+        <button class="nav-item" data-view="games">♧ <span>Jogos para dois</span></button>
+        <button class="nav-item" data-view="challenges">♡ <span>Perguntas e desafios</span></button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="sync-status"><span class="status-dot"></span> <span id="syncText">A ligar...</span></div>
+        <button id="logoutButton" class="logout-button">↪ Terminar sessão</button>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">WEDNESDAY / OUR SPACE</p>
+          <h1 id="pageTitle">O vosso espaço.</h1>
+        </div>
+        <div class="profile-chip">
+          <span id="userAvatar" class="user-avatar">D</span>
+          <span id="userName">Utilizador</span>
+        </div>
+      </header>
+
+      <section class="welcome-banner">
+        <div>
+          <p class="eyebrow orange-text">DOIS UTILIZADORES · UM ESPAÇO</p>
+          <h2>Pequenos planos.<br><span>Grandes memórias.</span></h2>
+          <p>Organizem o presente e planeiem o que vem a seguir.</p>
+        </div>
+        <div class="banner-symbol">D<span>♡</span>G</div>
+      </section>
+
+      <section class="stats-grid">
+        <article class="stat-card"><span>AGENDA</span><strong id="agendaCount">0</strong><small>eventos guardados</small></article>
+        <article class="stat-card"><span>TAREFAS</span><strong id="taskCount">0</strong><small>por concluir</small></article>
+        <article class="stat-card"><span>PLANOS</span><strong id="planCount">0</strong><small>ideias guardadas</small></article>
+        <article class="stat-card"><span>POUPANÇA</span><strong id="savingsTotal">0,00 €</strong><small>saldo registado</small></article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel main-panel">
+          <div class="panel-heading">
+            <div><p class="eyebrow">SHARED BOARD</p><h3 id="sectionTitle">O que vamos organizar?</h3></div>
+            <button id="addButton" class="primary-button compact">+ Adicionar</button>
+          </div>
+
+          <form id="itemForm" class="item-form hidden">
+            <label for="itemTitle">Título</label>
+            <input id="itemTitle" maxlength="100" placeholder="Ex.: Jantar de sábado" required>
+
+            <label for="itemCategory">Categoria</label>
+            <select id="itemCategory">
+              <option value="agenda">Agenda</option>
+              <option value="tasks">Tarefas</option>
+              <option value="plans">Planos e ideias</option>
+              <option value="expenses">Despesas</option>
+              <option value="notes">Notas e recados</option>
+              <option value="challenges">Perguntas e desafios</option>
+            </select>
+
+            <label for="itemDate">Data (opcional)</label>
+            <input id="itemDate" type="date">
+
+            <label for="itemAmount">Valor em euros (opcional)</label>
+            <input id="itemAmount" type="number" min="0" step="0.01" placeholder="0,00">
+
+            <label for="itemDetails">Detalhes (opcional)</label>
+            <textarea id="itemDetails" rows="3" maxlength="2000"
+              placeholder="Escreve aqui os detalhes..."></textarea>
+
+            <div class="form-actions">
+              <button id="cancelButton" class="secondary-button" type="button">Cancelar</button>
+              <button class="primary-button compact" type="submit">Guardar</button>
+            </div>
+          </form>
+
+          <div id="itemsList" class="items-list">
+            <div class="empty-state"><span>✳</span><p>A preparar o vosso espaço...</p></div>
+          </div>
+        </article>
+
+        <aside class="panel side-panel">
+          <p class="eyebrow">QUICK ACCESS</p>
+          <h3>O vosso espaço, à vossa maneira.</h3>
+          <p class="muted">Escolhe uma área para ver os registos partilhados.</p>
+          <div class="quick-links">
+            <button data-view="agenda">▦ <span>Agenda partilhada</span> <b>↗</b></button>
+            <button data-view="tasks">☑ <span>Ver tarefas</span> <b>↗</b></button>
+            <button data-view="plans">✳ <span>Planear algo juntos</span> <b>↗</b></button>
+            <button data-view="expenses">€ <span>Registar uma despesa</span> <b>↗</b></button>
+            <button data-view="games">♧ <span>Ir jogar</span> <b>↗</b></button>
+            <button data-view="challenges">♡ <span>Um desafio a dois</span> <b>↗</b></button>
+          </div>
+          <div class="privacy-card"><span>◈</span><div><strong>Espaço protegido</strong><p>Os dados dependem das regras de acesso do Firebase.</p></div></div>
+        </aside>
+      </section>
+
+      <footer class="app-footer">DIDICALO © 2026 <span>FEITO PARA D + G</span></footer>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
