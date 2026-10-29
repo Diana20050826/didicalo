@@ -344,3 +344,69 @@ button { touch-action: manipulation; }
 .stat-card:hover {
   border-color: #45404a;
 }
+
+/* DIDICALO — ferramentas de tarefas */
+
+.task-tools {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.task-tools input,
+.task-tools select,
+.task-priority-field select {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 14px;
+  color: #f5f5f5;
+  background: #191919;
+  border: 1px solid #383838;
+  border-radius: 12px;
+  font: inherit;
+}
+
+.task-priority-field {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+  color: #d5d5d5;
+  font-size: 0.9rem;
+}
+
+.task-priority-field[hidden] {
+  display: none !important;
+}
+
+.task-priority {
+  display: inline-flex;
+  align-self: flex-start;
+  margin-top: 8px;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.priority-urgent {
+  color: #ff9b83;
+  background: #47231f;
+}
+
+.priority-normal {
+  color: #ffbd72;
+  background: #392a1b;
+}
+
+.priority-low {
+  color: #a8d9b1;
+  background: #1d3425;
+}
+
+@media (min-width: 600px) {
+  .task-tools {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}

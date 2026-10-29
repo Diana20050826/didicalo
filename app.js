@@ -66,7 +66,11 @@ const toastElement = $("#toast");
 
 let isRegisterMode = false;
 let activeView = "overview";
-let allItems = {};
+let allItems = {};let taskSearch = "";
+let taskFilter = "all";
+let taskPriorityFilter = "all";
+let taskPrioritySelect = null;
+let taskTools = null;
 let stopItemsListener = null;
 let toastTimeout = null;
 
@@ -402,19 +406,35 @@ itemForm.addEventListener("submit", async (event) => {
   try {
     const newRef = push(ref(db, "shared/items"));
 
-    await set(newRef, {
-      title,
-      category,
-      details,
-      date: date || "",
-      amount,
-      done: false,
-      createdAt: Date.now(),
-      createdBy: user.uid
-    });
-
+ await set(newRef, {
+  title,
+  category,
+  details,
+  date: date || "",
+  amount,
+  done: false,
+  priority: category === "tasks"
+    ? taskPrioritySelect.value
+    : null,
+  createdAt: Date.now(),
+  createdBy: user.uid
+});
     itemForm.reset();
-    itemForm.classList.add("hidden");
+    itemForm.classList.add("hidden");if (taskTools) {
+  taskTools.classList.toggle("hidden", activeView !== "tasks");
+}
+
+if (activeView !== "tasks") {
+  taskSearch = "";
+  taskFilter = "all";
+  taskPriorityFilter = "all";
+
+  if (taskTools) {
+    taskTools.querySelector('input[type="search"]').value = "";
+    taskTools.querySelectorAll("select")[0].value = "all";
+    taskTools.querySelectorAll("select")[1].value = "all";
+  }
+}
 
     showToast("Registo guardado e partilhado!");
   } catch (error) {
@@ -441,16 +461,38 @@ function createElement(tag, className, text = "") {
 function renderItems() {
   itemsList.replaceChildren();
 
-  const entries = Object.entries(allItems)
-    .filter(([, item]) => item && typeof item === "object")
-    .filter(([, item]) => {
-      if (activeView === "overview") return true;
-      if (activeView === "games") return false;
+ const entries = Object.entries(allItems)
+  .filter(([, item]) => item && typeof item === "object")
+  .filter(([, item]) => {
+    if (activeView === "overview") return true;
+    if (activeView === "games") return false;
+    return item.category === activeView;
+  })
+  .filter(([, item]) => {
+    if (activeView !== "tasks") return true;
 
-      return item.category === activeView;
-    })
-    .sort(([, a], [, b]) => (b.createdAt || 0) - (a.createdAt || 0));
+    const query = taskSearch;
+    const searchableText =
+      `${item.title || ""} ${item.details || ""}`
+        .toLocaleLowerCase("pt-PT");
 
+    if (query && !searchableText.includes(query)) return false;
+
+    if (taskFilter === "pending" && item.done) return false;
+    if (taskFilter === "done" && !item.done) return false;
+
+    const priority = item.priority || "normal";
+
+    if (
+      taskPriorityFilter !== "all" &&
+      priority !== taskPriorityFilter
+    ) {
+      return false;
+    }
+
+    return true;
+  })
+  .sort(([, a], [, b]) => (b.createdAt || 0) - (a.createdAt || 0));
   if (activeView === "games") {
     const empty = createElement(
       "div",
@@ -486,7 +528,21 @@ function renderItems() {
     );
 
     const title = createElement("h4", "item-title", item.title || "Sem título");
-    textArea.append(category, title);
+    textArea.append(category, title);if (item.category === "tasks") {
+  const priorityNames = {
+    urgent: "URGENTE",
+    normal: "NORMAL",
+    low: "BAIXA"
+  };
+
+  const priority = createElement(
+    "span",
+    `task-priority priority-${item.priority || "normal"}`,
+    priorityNames[item.priority] || "NORMAL"
+  );
+
+  textArea.appendChild(priority);
+}
 
     if (item.details) {
       textArea.appendChild(
@@ -578,6 +634,74 @@ function renderItems() {
     itemsList.appendChild(card);
   }
 }
+
+function setupTaskTools() {
+  // Campo de prioridade no formulário existente
+  const priorityLabel = document.createElement("label");
+  priorityLabel.className = "task-priority-field";
+  priorityLabel.textContent = "Prioridade da tarefa";
+
+  taskPrioritySelect = document.createElement("select");
+  taskPrioritySelect.id = "taskPriority";
+  taskPrioritySelect.innerHTML = `
+    <option value="normal">Normal</option>
+    <option value="urgent">Urgente</option>
+    <option value="low">Baixa</option>
+  `;
+
+  priorityLabel.appendChild(taskPrioritySelect);
+  itemCategory.insertAdjacentElement("afterend", priorityLabel);
+
+  function updatePriorityVisibility() {
+    priorityLabel.hidden = itemCategory.value !== "tasks";
+  }
+
+  itemCategory.addEventListener("change", updatePriorityVisibility);
+  updatePriorityVisibility();
+
+  // Barra de pesquisa e filtros
+  taskTools = document.createElement("div");
+  taskTools.className = "task-tools hidden";
+
+  const search = document.createElement("input");
+  search.type = "search";
+  search.placeholder = "Pesquisar tarefas...";
+  search.setAttribute("aria-label", "Pesquisar tarefas");
+  search.addEventListener("input", () => {
+    taskSearch = search.value.trim().toLocaleLowerCase("pt-PT");
+    renderItems();
+  });
+
+  const status = document.createElement("select");
+  status.setAttribute("aria-label", "Filtrar por estado");
+  status.innerHTML = `
+    <option value="all">Todas as tarefas</option>
+    <option value="pending">Por concluir</option>
+    <option value="done">Concluídas</option>
+  `;
+  status.addEventListener("change", () => {
+    taskFilter = status.value;
+    renderItems();
+  });
+
+  const priority = document.createElement("select");
+  priority.setAttribute("aria-label", "Filtrar por prioridade");
+  priority.innerHTML = `
+    <option value="all">Todas as prioridades</option>
+    <option value="urgent">Urgentes</option>
+    <option value="normal">Normais</option>
+    <option value="low">Baixas</option>
+  `;
+  priority.addEventListener("change", () => {
+    taskPriorityFilter = priority.value;
+    renderItems();
+  });
+
+  taskTools.append(search, status, priority);
+  itemsList.parentElement.insertBefore(taskTools, itemsList);
+}
+
+setupTaskTools();
 
 // ==================================================
 // ESTATÍSTICAS DO PAINEL
